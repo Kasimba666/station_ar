@@ -1,66 +1,52 @@
 <template>
-  <div class="t-canvas">
-    <TresCanvas
-        preset="realistic"
-        clear-color="#d9d9d9"
-    >
-<!--        shadows-->
-<!--        alpha-->
-      <TresPerspectiveCamera
-          ref="cameraRef"
-          :fov="50"
-      />
-      <OrbitControls />
-      <TresGridHelper :args="[4, 4]" />
-      <Suspense>
-        <Model ref="modelRef"/>
-      </Suspense>
-      <TresDirectionalLight :position="[2, 4, 2]" :intensity="0.9" cast-shadow />
-      <TresAmbientLight :color="0xffffff" :intensity="0.7" />
-    </TresCanvas>
+  <div class="app">
+    <el-tabs type="border-card" class="user-el-tabs">
+      <el-tab-pane label="Tres.js">
+        <tresjs/>
+      </el-tab-pane>
+      <el-tab-pane label="stars 2d">
+        <starMap2d/>
+      </el-tab-pane>
+      <el-tab-pane label="stars">
 
+        <div class="stars">
+          <stars/>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
+
 </template>
 
-<script setup lang="ts">
+<script>
+import tresjs from "@/views/tresjs.vue";
+import starMap2d from "@/views/starMap2d.vue";
+import stars from "@/views/stars.vue";
 
-import Model from '/src/components/model.vue';
-import {TresCanvas, useRenderLoop } from '@tresjs/core';
-import {OrbitControls, GLTFModel} from '@tresjs/cientos';
-import {shallowRef} from 'vue';
-
-// import { useLoader } from '@tresjs/core'
-// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
-// // import {useTweakPane} from '@tresjs/cientos';
-
-//
-const { onLoop } = useRenderLoop();
-const cameraRef = shallowRef();
-const modelRef = shallowRef();
-
-
-onLoop(({delta, elapsed})=> {
-  if (!modelRef.value) return;
-  // cameraRef.value.position.lookAt([0, 1, 0]);
-  cameraRef.value.position.y = 4;
-  // cameraRef.value.lookAt([0, 0, 0]);
-  cameraRef.value.position.x = Math.sin(elapsed/10)*2;
-  cameraRef.value.position.z = Math.cos(elapsed/10)*2;
-  // modelRef.value.rotation.x += delta/2;
-  // modelRef.value.rotation.z = elapsed;
-
-
-});
-
-// });
-
+export default {
+  components: {tresjs, starMap2d, stars},
+  props: [],
+  data() {
+    return {
+    }
+  },
+  computed: {},
+  methods: {},
+}
 </script>
 
-<style scoped>
-.t-canvas {
-  height: 80dvw;
-  width: 100dvh;
-  margin: 5px;
-  padding: 5px;
+<style lang="scss">
+.app {
+  width: 100dvw;
+  height: 80dvh;
+
+  .user-el-tabs {
+    width: 100%;
+    height: auto;
+  }
+  .stars {
+    width: 100dvw;
+    height: 80dvh;
+  }
 }
 </style>

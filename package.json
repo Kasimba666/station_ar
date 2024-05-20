@@ -11,8 +11,12 @@
   "dependencies": {
     "@tresjs/cientos": "^3.9.0",
     "@tresjs/core": "^3.9.0",
+    "element-plus": "^2.7.3",
+    "lodash": "^4.17.21",
+    "sass": "^1.77.1",
     "three": "^0.164.1",
     "three-addons": "^1.2.0",
+    "troisjs": "^0.3.4",
     "tweakpane": "^4.0.3",
     "vue": "^3.4.21"
   },
