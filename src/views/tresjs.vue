@@ -16,7 +16,7 @@
       <Icosahedron
           ref="asteroid2Ref"
           :args="[0.05, 0]"
-          :position="[xPosition2, 1, zPosition2]"
+          :position="[xPosition2, yPosition2+1, zPosition2]"
       />
       <Icosahedron
           ref="asteroid3Ref"
@@ -26,7 +26,7 @@
       <Icosahedron
           ref="asteroid4Ref"
           :args="[0.05, 0]"
-          :position="[xPosition4, 2, zPosition4]"
+          :position="[xPosition4, yPosition4 + 2, zPosition4]"
       />
 <!--          :rotation="[0, yRotation, 0]"-->
       <OrbitControls />
@@ -144,10 +144,12 @@ export default {
       this.xPosition1 = Math.sin(0.8 * elapsed)*1.2;
       this.zPosition1 = Math.cos(0.7 * elapsed)*1.9;
       this.xPosition2 = Math.sin(1 * elapsed + pi/2)*1.7;
+      this.yPosition2 = Math.cos(0.6 * elapsed + pi)*1.2;
       this.zPosition2 = Math.cos(1 * elapsed + pi/2)*1.9;
       this.xPosition3 = Math.sin(0.5 * elapsed + pi*3/2)*1.2;
       this.zPosition3 = Math.cos(0.6 * elapsed + pi*3/2)*2.1;
       this.xPosition4 = Math.sin(0.6 * elapsed + pi)*1.2;
+      this.yPosition4 = Math.cos(0.6 * elapsed + pi)*1.2;
       this.zPosition4 = Math.cos(0.6 * elapsed + pi)*1.9;
       // this.zRotation += 0.04 * delta;
       // this.asteroid1Ref.position
