@@ -1,19 +1,7 @@
 <template>
   <div class="app">
-    <el-tabs type="border-card" class="user-el-tabs">
-      <el-tab-pane label="Tres.js">
         <tresjs/>
-      </el-tab-pane>
-      <el-tab-pane label="stars 2d">
-        <starMap2d/>
-      </el-tab-pane>
-      <el-tab-pane label="stars">
 
-        <div class="stars">
-          <stars/>
-        </div>
-      </el-tab-pane>
-    </el-tabs>
   </div>
 
 </template>
@@ -37,7 +25,7 @@ export default {
 
 <style lang="scss">
 .app {
-  width: 100dvw;
+  width: 90dvw;
   height: 80dvh;
 
   .user-el-tabs {

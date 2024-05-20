@@ -31,13 +31,21 @@
 <!--          :rotation="[0, yRotation, 0]"-->
       <OrbitControls />
       <TresGridHelper :args="[4, 4]" />
-              <Suspense>
-                <GLTFModel
-                    ref="modelRef"
-                    path="/src/data/station_ar.glb"
-                    draco
-                />
-              </Suspense>
+      <Suspense>
+        <GLTFModel
+            ref="modelStationRef"
+            path="/src/data/station_ar.glb"
+            draco
+        />
+      </Suspense>
+      <Suspense>
+        <GLTFModel
+            ref="modelAibashRef"
+            path="/src/data/aibash.glb"
+            :position="[1, -0.1, 1]"
+            draco
+        />
+      </Suspense>
       <TresDirectionalLight :position="[2, 4, 2]" :intensity="0.9" cast-shadow />
       <TresAmbientLight :color="0xffffff" :intensity="0.7" />
       <Stars
@@ -84,7 +92,8 @@ export default {
   setup() {
     const { onLoop } = useRenderLoop();
     const cameraRef = shallowRef();
-    const modelRef = shallowRef();
+    const modelStationRef = shallowRef();
+    const modelAibashRef = shallowRef();
     const xRotation = shallowRef(0);
     const yRotation = shallowRef(0);
     const zRotation = shallowRef(0);
@@ -106,7 +115,8 @@ export default {
 
     return {
       cameraRef,
-      modelRef,
+      modelStationRef: modelStationRef,
+      modelAibashRefRef: modelAibashRef,
       xRotation,
       yRotation,
       zRotation,
@@ -137,20 +147,20 @@ export default {
     this.init();
     const pi = Math.PI;
     this.onLoop(({delta, elapsed})=> {
-      if (!this.modelRef) return;
+      // if (!this.modelStationRef) return;
       this.xRotation += 0.2 * delta;
       this.yRotation += 0.03 * delta;
       this.zRotation += 0.04 * delta;
-      this.xPosition1 = Math.sin(0.8 * elapsed)*1.2;
-      this.zPosition1 = Math.cos(0.7 * elapsed)*1.9;
+      this.xPosition1 = Math.sin(-0.8 * elapsed)*1.2;
+      this.zPosition1 = Math.cos(-0.7 * elapsed)*1.9;
       this.xPosition2 = Math.sin(1 * elapsed + pi/2)*1.7;
       this.yPosition2 = Math.cos(0.6 * elapsed + pi)*1.2;
       this.zPosition2 = Math.cos(1 * elapsed + pi/2)*1.9;
       this.xPosition3 = Math.sin(0.5 * elapsed + pi*3/2)*1.2;
       this.zPosition3 = Math.cos(0.6 * elapsed + pi*3/2)*2.1;
       this.xPosition4 = Math.sin(0.6 * elapsed + pi)*1.2;
-      this.yPosition4 = Math.cos(0.6 * elapsed + pi)*1.2;
-      this.zPosition4 = Math.cos(0.6 * elapsed + pi)*1.9;
+      this.yPosition4 = Math.cos(-0.6 * elapsed + pi)*1.2;
+      this.zPosition4 = Math.cos(-0.6 * elapsed + pi)*1.9;
       // this.zRotation += 0.04 * delta;
       // this.asteroid1Ref.position
     });
@@ -161,7 +171,7 @@ export default {
 <style lang="scss">
 
 .tres {
-  width: 100dvw;
+  width: 90dvw;
   height: 80dvh;
 }
 
