@@ -31,10 +31,10 @@
 
       <TresMesh
           @click="onClick"
-          :position="[-0.38, 0.21 + button1Height, -0,38]"
+          :position="[0.38, 0.24, 0,38]"
       >
         <TresBoxGeometry
-            :args="[0.05, button1Height, 0.05]"
+            :args="[0.06, button1Height, 0.06]"
         />
         <TresMeshToonMaterial color="#0700ef"/>
       </TresMesh>
@@ -52,7 +52,7 @@
         <GLTFModel
             ref="modelAibashRef"
             path="/src/data/aibash.glb"
-            :position="[1, -0.1, 1]"
+            :position="[-1, -0.1, -1]"
             draco
         />
       </Suspense>
@@ -117,6 +117,9 @@ export default {
     const asteroid3Ref = shallowRef();
 
     const button1Height = shallowRef();
+    const asteroidsAmount = shallowRef();
+    const asteroidsMinRadius = shallowRef();
+    const asteroidsMaxRadius = shallowRef();
 
     return {
       cameraRef,
