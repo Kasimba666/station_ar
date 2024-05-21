@@ -29,15 +29,15 @@
           :position="[xPosition4, yPosition4 + 2, zPosition4]"
       />
 
-<!--      <TresMesh-->
-<!--          @click="onClick"-->
-<!--          :position="[-0.38, 0.26, -0,38]"-->
-<!--      >-->
-<!--        <TresBoxGeometry-->
-<!--            :args="[0.05, button1Height, 0.05]"-->
-<!--        />-->
-<!--        <TresMeshToonMaterial color="#efefef" />-->
-<!--      </TresMesh>-->
+      <TresMesh
+          @click="onClick"
+          :position="[-0.38, 0.21 + button1Height, -0,38]"
+      >
+        <TresBoxGeometry
+            :args="[0.05, button1Height, 0.05]"
+        />
+        <TresMeshToonMaterial color="#0700ef"/>
+      </TresMesh>
 
       <OrbitControls />
       <TresGridHelper :args="[4, 4]" />
@@ -154,7 +154,7 @@ export default {
         this.button1Height = 0.05;
         clearTimeout(buttonTimeOut);
         console.log(this.button1Height);
-      }, 1000);
+      }, 200);
     },
     onPointerEnter(e) {
       console.log(e);
