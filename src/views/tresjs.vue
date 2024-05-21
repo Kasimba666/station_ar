@@ -28,7 +28,17 @@
           :args="[0.05, 0]"
           :position="[xPosition4, yPosition4 + 2, zPosition4]"
       />
-<!--          :rotation="[0, yRotation, 0]"-->
+
+<!--      <TresMesh-->
+<!--          @click="onClick"-->
+<!--          :position="[-0.38, 0.26, -0,38]"-->
+<!--      >-->
+<!--        <TresBoxGeometry-->
+<!--            :args="[0.05, button1Height, 0.05]"-->
+<!--        />-->
+<!--        <TresMeshToonMaterial color="#efefef" />-->
+<!--      </TresMesh>-->
+
       <OrbitControls />
       <TresGridHelper :args="[4, 4]" />
       <Suspense>
@@ -65,13 +75,6 @@
           :size-attenuation="true"
           color="teal"
       />
-      <Suspense>
-        <Smoke
-            :speed="0.8"
-            :segments="12"
-            color="teal"
-        />
-      </Suspense>
     </TresCanvas>
   </div>
 
@@ -79,11 +82,11 @@
 
 <script>
 import {TresCanvas, useRenderLoop } from '@tresjs/core';
-import {OrbitControls, GLTFModel, Icosahedron, Stars, Smoke} from '@tresjs/cientos';
+import {OrbitControls, GLTFModel, Icosahedron, Stars, RoundedBox} from '@tresjs/cientos';
 import {shallowRef} from 'vue';
 
 export default {
-  components: {TresCanvas, OrbitControls, GLTFModel, Icosahedron, Stars, Smoke},
+  components: {TresCanvas, OrbitControls, GLTFModel, Icosahedron, Stars, RoundedBox},
   data() {
     return {
 
@@ -113,6 +116,8 @@ export default {
     const asteroid2Ref = shallowRef();
     const asteroid3Ref = shallowRef();
 
+    const button1Height = shallowRef();
+
     return {
       cameraRef,
       modelStationRef: modelStationRef,
@@ -136,16 +141,32 @@ export default {
       asteroid1Ref,
       asteroid2Ref,
       asteroid3Ref,
+      button1Height,
     }
   },
   methods: {
     init() {
     },
-
+    onClick(e) {
+      this.button1Height = 0.02;
+      console.log(this.button1Height);
+      let buttonTimeOut = setTimeout(()=>{
+        this.button1Height = 0.05;
+        clearTimeout(buttonTimeOut);
+        console.log(this.button1Height);
+      }, 1000);
+    },
+    onPointerEnter(e) {
+      console.log(e);
+    },
+    onPointerLeave(e) {
+      console.log(e);
+    },
   },
   mounted() {
     this.init();
     const pi = Math.PI;
+    this.button1Height = 0.05;
     this.onLoop(({delta, elapsed})=> {
       // if (!this.modelStationRef) return;
       this.xRotation += 0.2 * delta;
