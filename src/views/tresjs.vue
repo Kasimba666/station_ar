@@ -9,25 +9,12 @@
           :fov="65"
       />
       <Icosahedron
-          ref="asteroid1Ref"
-          :args="[0.06, 0]"
-          :position="[xPosition1, 0.5, zPosition1]"
+          ref="asteroidRef"
+          v-for="item in asteroidsRef"
+          :args="[item['radius'], 0]"
+          :position="[item['position']['x'], item['position']['y'], item['position']['z']]"
       />
-      <Icosahedron
-          ref="asteroid2Ref"
-          :args="[0.05, 0]"
-          :position="[xPosition2, yPosition2+1, zPosition2]"
-      />
-      <Icosahedron
-          ref="asteroid3Ref"
-          :args="[0.07, 0]"
-          :position="[xPosition3, 1.5, zPosition3]"
-      />
-      <Icosahedron
-          ref="asteroid4Ref"
-          :args="[0.05, 0]"
-          :position="[xPosition4, yPosition4 + 2, zPosition4]"
-      />
+
 
       <TresMesh
           @click="onClick"
@@ -82,14 +69,14 @@
 
 <script>
 import {TresCanvas, useRenderLoop } from '@tresjs/core';
-import {OrbitControls, GLTFModel, Icosahedron, Stars, RoundedBox} from '@tresjs/cientos';
-import {shallowRef} from 'vue';
+import {OrbitControls, GLTFModel, Icosahedron, Stars} from '@tresjs/cientos';
+import {shallowRef, reactive} from 'vue';
 
 export default {
-  components: {TresCanvas, OrbitControls, GLTFModel, Icosahedron, Stars, RoundedBox},
+  components: {TresCanvas, OrbitControls, GLTFModel, Icosahedron, Stars},
   data() {
     return {
-
+      asteroidsPositions: [],
     }
   },
   setup() {
@@ -100,55 +87,61 @@ export default {
     const xRotation = shallowRef(0);
     const yRotation = shallowRef(0);
     const zRotation = shallowRef(0);
-    const xPosition1 = shallowRef(0);
-    const yPosition1 = shallowRef(0);
-    const zPosition1 = shallowRef(0);
-    const xPosition2 = shallowRef(0);
-    const yPosition2 = shallowRef(0);
-    const zPosition2 = shallowRef(0);
-    const xPosition3 = shallowRef(0);
-    const yPosition3 = shallowRef(0);
-    const zPosition3 = shallowRef(0);
-    const xPosition4 = shallowRef(0);
-    const yPosition4 = shallowRef(0);
-    const zPosition4 = shallowRef(0);
-    const asteroid1Ref = shallowRef();
-    const asteroid2Ref = shallowRef();
-    const asteroid3Ref = shallowRef();
+
+    const radius = shallowRef(0);
+
 
     const button1Height = shallowRef();
-    const asteroidsAmount = shallowRef();
-    const asteroidsMinRadius = shallowRef();
-    const asteroidsMaxRadius = shallowRef();
+    const asteroidsAmount = shallowRef(20);
+
+    const asteroidsQs = [];
+    const asteroidsRef = reactive([]);
 
     return {
       cameraRef,
       modelStationRef: modelStationRef,
-      modelAibashRefRef: modelAibashRef,
+      modelAibashRef: modelAibashRef,
+      asteroidsRef,
+      radius,
+      onLoop,
       xRotation,
       yRotation,
       zRotation,
-      xPosition1,
-      yPosition1,
-      zPosition1,
-      xPosition2,
-      yPosition2,
-      zPosition2,
-      xPosition3,
-      yPosition3,
-      zPosition3,
-      xPosition4,
-      yPosition4,
-      zPosition4,
-      onLoop,
-      asteroid1Ref,
-      asteroid2Ref,
-      asteroid3Ref,
+
       button1Height,
+      asteroidsAmount,
+      asteroidsQs
     }
   },
   methods: {
     init() {
+      const pi = Math.PI;
+      for (let i = 0; i < this.asteroidsAmount; i++)  {
+        this.asteroidsQs.push(
+            {position: {
+                x: {
+                  qAngleSpeed: Math.random() ,
+                  qAngleShift: Math.random() * 2 * pi,
+                  qScale: Math.random() * 3,
+                  qShift: 0
+                },
+                y: {
+                  qAngleSpeed: Math.random() ,
+                  qAngleShift: Math.random() * 2 * pi,
+                  qScale: Math.random() * 3,
+                  qShift: 0
+                },
+                z: {
+                  qAngleSpeed: Math.random() ,
+                  qAngleShift: Math.random() * 2 * pi,
+                  qScale: Math.random() * 3,
+                  qShift: 0
+                }
+              },
+            radius: 0.1 * Math.random()
+            }
+        );
+      }
     },
     onClick(e) {
       this.button1Height = 0.02;
@@ -172,21 +165,22 @@ export default {
     this.button1Height = 0.05;
     this.onLoop(({delta, elapsed})=> {
       // if (!this.modelStationRef) return;
+      this.asteroidsRef=[];
+      this.asteroidsQs.forEach((v)=>{
+        this.asteroidsRef.push(
+            {position:
+              {
+                x: Math.sin(v.position.x.qAngleSpeed * elapsed + v.position.x.qAngleShift) * v.position.x.qScale + v.position.x.qShift,
+                y: Math.sin(v.position.y.qAngleSpeed * elapsed + v.position.y.qAngleShift) * v.position.y.qScale + v.position.y.qShift,
+                z: Math.cos(v.position.z.qAngleSpeed * elapsed + v.position.z.qAngleShift) * v.position.z.qScale + v.position.z.qShift
+              },
+              radius: v.radius
+            })
+      });
       this.xRotation += 0.2 * delta;
       this.yRotation += 0.03 * delta;
       this.zRotation += 0.04 * delta;
-      this.xPosition1 = Math.sin(-0.8 * elapsed)*1.2;
-      this.zPosition1 = Math.cos(-0.7 * elapsed)*1.9;
-      this.xPosition2 = Math.sin(1 * elapsed + pi/2)*1.7;
-      this.yPosition2 = Math.cos(0.6 * elapsed + pi)*1.2;
-      this.zPosition2 = Math.cos(1 * elapsed + pi/2)*1.9;
-      this.xPosition3 = Math.sin(0.5 * elapsed + pi*3/2)*1.2;
-      this.zPosition3 = Math.cos(0.6 * elapsed + pi*3/2)*2.1;
-      this.xPosition4 = Math.sin(0.6 * elapsed + pi)*1.2;
-      this.yPosition4 = Math.cos(-0.6 * elapsed + pi)*1.2;
-      this.zPosition4 = Math.cos(-0.6 * elapsed + pi)*1.9;
-      // this.zRotation += 0.04 * delta;
-      // this.asteroid1Ref.position
+
     });
   },
 }
