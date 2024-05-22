@@ -12,19 +12,37 @@
           ref="asteroidRef"
           v-for="item in asteroidsRef"
           :args="[item['radius'], 0]"
-          :position="[item['position']['x'], item['position']['y'], item['position']['z']]"
+          :position="[item['position']['x'], item['position']['y'] + 1.5, item['position']['z']]"
+          color="brown"
       />
-
 
       <TresMesh
           @click="onClick"
-          :position="[0.38, 0.24, 0,38]"
+          :position="[0.38, 0.24, 0.38]"
       >
         <TresBoxGeometry
             :args="[0.06, button1Height, 0.06]"
         />
         <TresMeshToonMaterial color="#0700ef"/>
       </TresMesh>
+
+<!--      <TresMesh-->
+<!--              :position="[0, 2.6, 0]"-->
+<!--              v-rotate:x.y="0.1"-->
+<!--      >-->
+<!--          <Suspense>-->
+<!--              <Text3D-->
+<!--                      :text="text"-->
+
+<!--                      font="/src/data/Fonts/Calibri_Bold.json"-->
+<!--                      size=0.1-->
+<!--                      center-->
+<!--                      need-updates-->
+<!--              />-->
+<!--          </Suspense>-->
+
+<!--        <TresMeshToonMaterial color="#0700ef"/>-->
+<!--      </TresMesh>-->
 
       <OrbitControls />
       <TresGridHelper :args="[4, 4]" />
@@ -37,6 +55,7 @@
       </Suspense>
       <Suspense>
         <GLTFModel
+            v-if="isVisibleTombstones"
             ref="modelAibashRef"
             path="/src/data/aibash.glb"
             :position="[-1, -0.1, -1]"
@@ -68,12 +87,12 @@
 </template>
 
 <script>
-import {TresCanvas, useRenderLoop } from '@tresjs/core';
-import {OrbitControls, GLTFModel, Icosahedron, Stars} from '@tresjs/cientos';
+import {TresCanvas, useRenderLoop, vRotate} from '@tresjs/core';
+import {OrbitControls, GLTFModel, Icosahedron, Stars, Text3D} from '@tresjs/cientos';
 import {shallowRef, reactive} from 'vue';
 
 export default {
-  components: {TresCanvas, OrbitControls, GLTFModel, Icosahedron, Stars},
+  components: {TresCanvas, OrbitControls, GLTFModel, Icosahedron, Stars, Text3D},
   data() {
     return {
       asteroidsPositions: [],
@@ -84,14 +103,17 @@ export default {
     const cameraRef = shallowRef();
     const modelStationRef = shallowRef();
     const modelAibashRef = shallowRef();
+    const isVisibleTombstones = shallowRef(false);
     const xRotation = shallowRef(0);
     const yRotation = shallowRef(0);
     const zRotation = shallowRef(0);
 
     const radius = shallowRef(0);
 
+    const text = shallowRef('Tomb Station');
 
-    const button1Height = shallowRef();
+
+    const buttonVisibleTombstonesHeight = shallowRef();
     const asteroidsAmount = shallowRef(20);
 
     const asteroidsQs = [];
@@ -107,8 +129,9 @@ export default {
       xRotation,
       yRotation,
       zRotation,
-
-      button1Height,
+      text,
+      button1Height: buttonVisibleTombstonesHeight,
+      isVisibleTombstones,
       asteroidsAmount,
       asteroidsQs
     }
@@ -145,7 +168,7 @@ export default {
     },
     onClick(e) {
       this.button1Height = 0.02;
-      console.log(this.button1Height);
+      this.isVisibleTombstones = !this.isVisibleTombstones
       let buttonTimeOut = setTimeout(()=>{
         this.button1Height = 0.05;
         clearTimeout(buttonTimeOut);
